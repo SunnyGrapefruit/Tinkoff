@@ -7,15 +7,25 @@ import static com.codeborne.selenide.Condition.*;
 public class TinkoffTest {
 
     @Test
-    public void userCanLoginByUsername() {
+    public void getCurrentPageTest() {
+        open("https://www.tinkoff.ru/about/exchange/");
+        $(By.className("header__3Gok1")).shouldHave(text("Курсы валют"));
+    }
 
-        open("http://google.com/ncr");
-        $(By.name("q")).val("selenide").pressEnter();
-//        open("/login");
-//        $(By.name("user.name")).setValue("johny");
-//        $("#submit").click();
-//        $(".loading_progress").should(disappear); // Само подождёт, пока элемент исчезнет
-//        $("#username").shouldHave(text("Hello, Johny!")); // Само подождёт, пока у элемента появится нужный текст
+
+
+    @Test
+    public void changeCurrencyFromTest() {
+        open("https://www.tinkoff.ru/about/exchange/");
+        $(By.id("TCSid1")).shouldHave(text("Евро"));
+        $(By.id("TCSid3")).shouldHave(text("Рубль"));
+    }
+
+    @Test
+    public void changeCurrencyToTest() {
+        open("https://www.tinkoff.ru/about/exchange/");
+        $(By.id("TCSid1")).shouldHave(text("Евро"));
+        $(By.id("TCSid3")).shouldHave(text("Доллар"));
     }
 
 }
