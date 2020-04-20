@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "CBR Rates",
+  "type": "object",
+  "properties": {
+    "Date": {
+      "type": "string"
+    },
+    "PreviousDate": {
+      "type": "string"
+    },
+    "Timestamp": {
+      "type": "string"
+    },
+    "Valute": {
+      "type": "object",
+      "properties": {
+        "USD": {
+          "ID": {"type": "string"},
+          "Name": {"type": "string"},
+          "Value": {"type": "double"}
+        },
+        "EUR": {
+          "ID": {"type": "string"},
+          "Name": {"type": "string"},
+          "Value": {"type": "double"}
+        }
+      },
+      "required": ["USD", "EUR"]
+    }
+  }
+}
