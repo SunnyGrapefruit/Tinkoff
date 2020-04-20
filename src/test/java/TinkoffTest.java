@@ -40,7 +40,7 @@ public class TinkoffTest {
 //        footerTest();
         getCurrentPageTest();
         getCurrencyFromTest();
-        changeCurrencyFromTest();
+//        changeCurrencyFromTest();
 //        changeCurrencyToTest();
     }
 

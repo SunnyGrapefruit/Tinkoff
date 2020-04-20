@@ -12,12 +12,8 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
-import static org.hamcrest.core.IsEqual.equalTo;
-
 
 
 public class CbrCourse {
@@ -32,11 +28,6 @@ public class CbrCourse {
                 .then()
                 .statusCode(HttpStatus.SC_OK);
     }
-
-//    @AfterClass
-//    public void tearDown(){
-//        driver.quit();
-//    }
 
     @Test
     @DisplayName("Тест страницы 'Курс валют'")
@@ -90,8 +81,7 @@ public class CbrCourse {
     }
 
 
-   @Step("Проверка header") //Проверка наличия евро и доллара
-//    @Test
+   @Step("Проверка курсов") //Проверка наличия евро и доллара
     public void saveRates() {
         double usdRate = requestSpecification.extract()
                 .jsonPath()
@@ -109,7 +99,5 @@ public class CbrCourse {
         $(byText("Доллар")).click();
 
 //        Assert.assertEquals(eurRate, "ну тут какой-то курс вычислить");
-
     }
-
 }
