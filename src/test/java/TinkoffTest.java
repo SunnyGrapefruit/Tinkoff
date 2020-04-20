@@ -1,15 +1,20 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
+
+import java.util.List;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Condition.*;
@@ -41,7 +46,12 @@ public class TinkoffTest {
 
     @Step("Проверка header") //Пункт 3
     public void headerTest() {
-
+        ElementsCollection links = $$(By.tagName("a"));
+        for(WebElement  link : links) {
+            String href = link.getAttribute("href");
+            int statusCode = RestAssured.get(href).statusCode();
+            Assert.assertEquals(statusCode, HttpStatus.SC_OK);
+        }
     }
 
 

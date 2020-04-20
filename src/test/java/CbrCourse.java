@@ -41,11 +41,11 @@ public class CbrCourse {
     @Test
     @DisplayName("Тест страницы 'Курс валют'")
     public void testCbrApi() {
-//        getWith200StatusTest();
-//        getHeaderTest();
-//        getCourseTest();
+        getWith200StatusTest();
+        getHeaderTest();
+        getCourseTest();
         getDateTest();
-//        saveRates();
+        saveRates();
     }
 
     @Step("Проверка статуса") //Пункт 12
@@ -90,8 +90,8 @@ public class CbrCourse {
     }
 
 
-    @Step("Проверка header") //Проверка наличия евро и доллара
-    @Test
+   @Step("Проверка header") //Проверка наличия евро и доллара
+//    @Test
     public void saveRates() {
         double usdRate = requestSpecification.extract()
                 .jsonPath()
@@ -99,18 +99,16 @@ public class CbrCourse {
         double eurRate = requestSpecification.extract()
                 .jsonPath()
                 .getDouble("Valute.EUR.Value");
-//        System.out.println("USD Rate: " + usdRate);
-//        System.out.println("EUR Rate: " + eurRate);
-
 
         open("https://www.tinkoff.ru/about/exchange/");
-        String  getCourseFrom= $(By.xpath("/html/body/div[1]/div/div/div[1]/div/div/div/div/div/div[3]/div/div/div[3]/div/div[2]/div[2]/div[1]/div[2]/div")).getText();
+        String getCourseFrom= $(By.xpath("//div[@class='Text__text_primary_28uo7']")).getText();
+
         Assert.assertEquals(eurRate, getCourseFrom);
 
         $(By.id("TCSid1")).click();
         $(byText("Доллар")).click();
 
-        Assert.assertEquals(eurRate, "ну тут какой-то курс выислить");
+//        Assert.assertEquals(eurRate, "ну тут какой-то курс вычислить");
 
     }
 
