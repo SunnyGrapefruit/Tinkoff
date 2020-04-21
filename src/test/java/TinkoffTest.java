@@ -2,9 +2,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.logevents.SelenideLogger;
-import io.qameta.allure.AllureConstants;
-import io.qameta.allure.AllureLifecycle;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
@@ -22,8 +19,8 @@ public class TinkoffTest {
 
     SelenideElement getCurrencyFrom = $(By.id("TCSid1"));
     SelenideElement getCurrencyTo = $(By.id("TCSid3"));
-    SelenideElement courseFrom = $(By.xpath("/html/body/div[1]/div/div/div[1]/div/div/div/div/div/div[3]/div/div/div[3]/div/div[1]/div[2]/div/div[1]"));
-    SelenideElement courseTo = $(By.xpath("/html/body/div[1]/div/div/div[1]/div/div/div/div/div/div[3]/div/div/div[3]/div/div[1]/div[2]/div/div[2]"));
+    SelenideElement courseFrom = $(By.cssSelector("div.Table__td_zJ6Up.Table__withoutPadding_xz0A8.Table__valign_top_1sby8 > div > div:nth-child(1)"));
+    SelenideElement courseTo = $(By.cssSelector("div.Table__td_zJ6Up.Table__withoutPadding_xz0A8.Table__valign_top_1sby8 > div > div:nth-child(2)"));
 
 
     @Before
@@ -36,11 +33,10 @@ public class TinkoffTest {
     @DisplayName("Тест страницы 'Курс валют'")
     public void testCourseCurrency() {
 //        headerTest();
-//        footerTest();
         getCurrentPageTest();
         getCurrencyFromTest();
         changeCurrencyFromTest();
-//        changeCurrencyToTest();
+        changeCurrencyToTest();
     }
 
     @Step("Проверка header") //Пункт 3
@@ -56,20 +52,17 @@ public class TinkoffTest {
 
     @Step("Проверка текущего раздела") //Пункт 4
     public void getCurrentPageTest() {
-        String getCurrentPage = $(By.className("header__n-Ztx")).getText(); //данный класс является уникальным для выбранного раздела(задает желтый цвет фона у выбранного элемента
+        String getCurrentPage = $(By.className("header__n-Ztx")).getText(); //данный класс является уникальным для выбранного раздела(задает желтый цвет фона у элемента)
         Assert.assertEquals("Курсы валют", getCurrentPage);
     }
 
     @Step("Проверка валют выставленных по умолчанию") //Пункт 6
     public void getCurrencyFromTest() {
-
         Assert.assertEquals("Рубль", getCurrencyFrom.getText());
         Assert.assertEquals("Евро", getCurrencyTo.getText());
 
-        String  getCourseFrom= courseFrom.getText();
-        String  getCourseTo= courseTo.getText();
-        Assert.assertEquals("₽ → €", getCourseFrom);
-        Assert.assertEquals("€ → ₽", getCourseTo);
+        Assert.assertEquals("₽ → €", courseFrom.getText());
+        Assert.assertEquals("€ → ₽", courseTo.getText());
     }
 
 
@@ -88,13 +81,13 @@ public class TinkoffTest {
     public void changeCurrencyToTest() {
         getCurrencyFrom.shouldHave(Condition.text("Евро"));
         getCurrencyTo.click();
+
         $(byText("Доллар")).click();
+
         getCurrencyFrom.shouldHave(Condition.text("Евро"));
         getCurrencyTo.shouldHave(Condition.text("Доллар"));
 
-        String  getCourseFrom = courseFrom.getText();
-        String  getCourseTo = courseTo.getText();
-        Assert.assertEquals("$ → €", getCourseFrom);
-        Assert.assertEquals("€ → $", getCourseTo);
+        Assert.assertEquals("$ → €", courseFrom.getText());
+        Assert.assertEquals("€ → $", courseTo.getText());
     }
 }
