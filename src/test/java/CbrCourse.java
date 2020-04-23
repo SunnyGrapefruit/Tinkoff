@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
@@ -60,7 +62,7 @@ public class CbrCourse {
     @Step("Проверка даты") //Пункт 15
     public void getDateTest() {
         Assert.assertEquals(
-                LocalDate.now().minusDays(1),
+                LocalDate.now(),
                 LocalDate.parse(
                         requestSpecification.extract()
                                 .jsonPath()
@@ -69,7 +71,7 @@ public class CbrCourse {
                 )
         );
         Assert.assertEquals(
-                LocalDate.now(),
+                LocalDate.now().plusDays(1),
                 LocalDate.parse(
                         requestSpecification.extract()
                                 .jsonPath()
@@ -90,13 +92,13 @@ public class CbrCourse {
                 .getDouble("Valute.EUR.Value");
 
         open("https://www.tinkoff.ru/about/exchange/");
-        String getCourseFrom= $(By.cssSelector("div.Table__td_zJ6Up.Table__withoutPadding_xz0A8.Table__valign_top_1sby8 > div:nth-child(1) > div:nth-child(2) > div.Text__text_primary_28uo7")).getText();
 
+        String getCourseFrom= $$(".Table__valign_bottom_1XlMR").get(1).getText();
         Assert.assertEquals(eurRate, getCourseFrom);
-
         $(By.id("TCSid1")).click();
         $(byText("Доллар")).click();
-
 //        Assert.assertEquals(eurRate, "ну тут какой-то курс вычислить");
+
     }
+
 }

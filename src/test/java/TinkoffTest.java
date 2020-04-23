@@ -1,7 +1,6 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
@@ -12,21 +11,26 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selectors.*;
+
 
 public class TinkoffTest {
-
-    SelenideElement getCurrencyFrom = $(By.id("TCSid1"));
-    SelenideElement getCurrencyTo = $(By.id("TCSid3"));
-    SelenideElement courseFrom = $(By.cssSelector("div.Table__td_zJ6Up.Table__withoutPadding_xz0A8.Table__valign_top_1sby8 > div > div:nth-child(1)"));
-    SelenideElement courseTo = $(By.cssSelector("div.Table__td_zJ6Up.Table__withoutPadding_xz0A8.Table__valign_top_1sby8 > div > div:nth-child(2)"));
-
 
     @Before
     public void setUp(){
         Configuration.savePageSource = false;
         open("https://www.tinkoff.ru/about/exchange/");
+    }
+
+    public void response(WebElement url){
+        List<WebElement> links = url.findElements(By.cssSelector("a"));
+        for(WebElement  link : links) {
+            String href = link.getAttribute("href");
+            int statusCode = RestAssured.get(href).statusCode();
+            Assert.assertEquals(statusCode, HttpStatus.SC_OK);
+        }
     }
 
     @Test
@@ -49,45 +53,44 @@ public class TinkoffTest {
         }
     }
 
-
     @Step("Проверка текущего раздела") //Пункт 4
     public void getCurrentPageTest() {
-        String getCurrentPage = $(By.className("header__n-Ztx")).getText(); //данный класс является уникальным для выбранного раздела(задает желтый цвет фона у элемента)
-        Assert.assertEquals("Курсы валют", getCurrentPage);
+        ExchangePage exchangePage = new ExchangePage();
+        Assert.assertEquals("Курсы валют", exchangePage.getCurrentPage());
     }
 
     @Step("Проверка валют выставленных по умолчанию") //Пункт 6
     public void getCurrencyFromTest() {
-        Assert.assertEquals("Рубль", getCurrencyFrom.getText());
-        Assert.assertEquals("Евро", getCurrencyTo.getText());
+        ExchangePage exchangePage = new ExchangePage();
 
-        Assert.assertEquals("₽ → €", courseFrom.getText());
-        Assert.assertEquals("€ → ₽", courseTo.getText());
+        Assert.assertEquals("Рубль", exchangePage.getCurrencyFrom());
+        Assert.assertEquals("Евро", exchangePage.getCurrencyTo());
+
+        Assert.assertEquals("₽ → €", exchangePage.getCourseFrom());
+        Assert.assertEquals("€ → ₽", exchangePage.getCourseTo());
     }
-
 
     @Step("Проверка курса 'Евро' -> 'Рубль'") //Пункт 7
     public void changeCurrencyFromTest(){
-        getCurrencyFrom.click();
-        $(byText("Евро")).click();
-//        Assert.assertEquals("Евро", getCurrencyFrom.getText());
-//        Assert.assertEquals("Рубль", getCurrencyTo.getText());
-        getCurrencyFrom.shouldHave(Condition.text("Евро"));
-        getCurrencyTo.shouldHave(Condition.text("Рубль"));
+        ExchangePage exchangePage = new ExchangePage();
+
+        exchangePage.changeCurrencyFrom();
+
+        exchangePage.currencyFrom.shouldHave(Condition.text("Евро"));
+        exchangePage.currencyTo.shouldHave(Condition.text("Рубль"));
 
     }
 
     @Step("Проверка курса 'Евро' -> 'Доллар'") //Пункт 8-10
     public void changeCurrencyToTest() {
-        getCurrencyFrom.shouldHave(Condition.text("Евро"));
-        getCurrencyTo.click();
+        ExchangePage exchangePage = new ExchangePage();
 
-        $(byText("Доллар")).click();
+        exchangePage.changeCurrencyTo();
 
-        getCurrencyFrom.shouldHave(Condition.text("Евро"));
-        getCurrencyTo.shouldHave(Condition.text("Доллар"));
+        exchangePage.currencyFrom.shouldHave(Condition.text("Евро"));
+        exchangePage.currencyTo.shouldHave(Condition.text("Доллар"));
 
-        Assert.assertEquals("$ → €", courseFrom.getText());
-        Assert.assertEquals("€ → $", courseTo.getText());
+        Assert.assertEquals("$ → €", exchangePage.getCourseFrom());
+        Assert.assertEquals("€ → $", exchangePage.getCourseTo());
     }
 }
