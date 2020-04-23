@@ -18,7 +18,8 @@ public class ExchangePage {
     SelenideElement courseFrom = $$(".DesktopExchange__th_AXtbR").get(1);
     SelenideElement courseTo = $$(".DesktopExchange__th_AXtbR").get(2);
 
-
+    //CbrCourse
+    SelenideElement valueCourseFrom= $$(".Table__valign_bottom_1XlMR").get(1);
 
     public String getCurrentPage(){
         String current = currentPage.getText();
@@ -45,15 +46,20 @@ public class ExchangePage {
         return currency;
     }
 
-    public void changeCurrencyFrom(){
+    public void changeCurrencyFrom(String course){
         currencyFrom.click();
-        $(byText("Евро")).click();
-        currencyFrom.shouldHave(Condition.text("Евро"));
+        $(byText(course)).click();
+        currencyFrom.shouldHave(Condition.text(course));
     }
 
-    public void changeCurrencyTo(){
+    public void changeCurrencyTo(String course){
         currencyTo.click();
-        $(byText("Доллар")).click();
+        $(byText(course)).click();
+        currencyTo.shouldHave(Condition.text(course));
     }
 
+    public String getValueCourseFrom(){
+        String currency = valueCourseFrom.getText();
+        return currency;
+    }
 }

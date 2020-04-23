@@ -74,7 +74,7 @@ public class TinkoffTest {
     public void changeCurrencyFromTest(){
         ExchangePage exchangePage = new ExchangePage();
 
-        exchangePage.changeCurrencyFrom();
+        exchangePage.changeCurrencyFrom("Евро");
 
         exchangePage.currencyFrom.shouldHave(Condition.text("Евро"));
         exchangePage.currencyTo.shouldHave(Condition.text("Рубль"));
@@ -85,7 +85,7 @@ public class TinkoffTest {
     public void changeCurrencyToTest() {
         ExchangePage exchangePage = new ExchangePage();
 
-        exchangePage.changeCurrencyTo();
+        exchangePage.changeCurrencyTo("Доллар");
 
         exchangePage.currencyFrom.shouldHave(Condition.text("Евро"));
         exchangePage.currencyTo.shouldHave(Condition.text("Доллар"));
