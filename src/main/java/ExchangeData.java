@@ -1,15 +1,25 @@
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 public class ExchangeData {
     @SerializedName("Date")
-    private String date;
+    private Date date;
     @SerializedName("Timestamp")
-    private String timestamp;
+    private Date timestamp;
     @SerializedName("Valute")
     private Valute valute;
 
     public Valute getValute() {
         return valute;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
     }
 
     public class Valute {

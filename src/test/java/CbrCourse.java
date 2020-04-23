@@ -1,4 +1,3 @@
-import com.codeborne.selenide.Condition;
 import com.google.gson.Gson;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
@@ -7,14 +6,9 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.junit.*;
-import org.openqa.selenium.By;
 import io.restassured.module.jsv.JsonSchemaValidator;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selectors.*;
 
 
 public class CbrCourse {
@@ -60,27 +54,11 @@ public class CbrCourse {
 
     @Step("Проверка даты") //Пункт 15
     public void getDateTest() {
-        Assert.assertEquals(
-                LocalDate.now(),
-                LocalDate.parse(
-                        requestSpecification.extract()
-                                .jsonPath()
-                                .getString("Timestamp"),
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
-                )
-        );
-        Assert.assertEquals(
-                LocalDate.now().plusDays(1),
-                LocalDate.parse(
-                        requestSpecification.extract()
-                                .jsonPath()
-                                .getString("Date"),
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
-                )
-        );
+        String re =  requestSpecification.extract().body().asString();
+        ExchangeData exchangeData = new Gson().fromJson(re, ExchangeData.class);
 
+        Assert.assertTrue(exchangeData.getDate().after(exchangeData.getTimestamp()));
     }
-
 
     @Step("Проверка курсов") //Проверка наличия евро и доллара
     public void saveRates() {
