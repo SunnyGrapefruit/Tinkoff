@@ -9,3 +9,5 @@ gradle - v. '5.6.4'
 1 Запустить терминал
 2 Перейти в корень проекта
 3 Выполнить команду "gradle test"
+4 Выполнить команду "allure generate build/allure-results -o build/reports/allure"
+5 Выполнить команду "allure open build/reports/allure"
