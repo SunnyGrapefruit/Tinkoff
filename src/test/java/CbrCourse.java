@@ -24,7 +24,7 @@ public class CbrCourse {
     }
 
     @Test
-    @DisplayName("Тест страницы 'Курс валют'")
+    @DisplayName("Тест ЦБ API")
     public void testCbrApi() {
         getWith200StatusTest();
         getHeaderTest();
